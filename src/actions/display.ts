@@ -16,6 +16,7 @@ export const displayUnusedTranslations = async (
     srcExtensions: config.localesExtensions,
     fileNameResolver: config.localeNameResolver,
     recursiveSearch: config.localesPathSubdirectories,
+    ignorePaths: config.ignorePaths,
   });
 
   const srcFilesPaths = await generateFilesPaths(
