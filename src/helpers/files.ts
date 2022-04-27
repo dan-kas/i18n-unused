@@ -80,14 +80,15 @@ export const generateFilesPaths = async (
     const acc = await accPromise;
 
     if (ignorePaths) {
-      const fullBasePath = `${process.cwd()}/${basePath}`;
-      const pathFromSrc = `${nextPath.split(fullBasePath).join(basePath)}${
-        dirent.isDirectory() ? '/' : ''
-      }`;
+      const relativeBasePath = path.relative(process.cwd(), basePath);
+      const pathFromSrc = path.join(
+        relativeBasePath,
+        dirent.isDirectory() ? path.sep : '',
+      );
 
       if (
         ignorePaths.some((ignorePath) =>
-          pathFromSrc.startsWith(`${ignorePath}/`),
+          pathFromSrc.startsWith(`${ignorePath}${path.sep}`),
         )
       ) {
         return acc;
