@@ -15,6 +15,7 @@ export const displayUnusedTranslations = async (
   const localesFilesPaths = await generateFilesPaths(config.localesPath, {
     srcExtensions: config.localesExtensions,
     fileNameResolver: config.localeNameResolver,
+    recursiveSearch: config.localesPathSubdirectories,
   });
 
   const srcFilesPaths = await generateFilesPaths(
@@ -73,6 +74,7 @@ export const displayMissedTranslations = async (
   const localesFilesPaths = await generateFilesPaths(config.localesPath, {
     srcExtensions: config.localesExtensions,
     fileNameResolver: config.localeNameResolver,
+    recursiveSearch: config.localesPathSubdirectories,
   });
 
   const srcFilesPaths = await generateFilesPaths(

@@ -38,6 +38,7 @@ export type ModuleResolver = (m: RecursiveStruct) => RecursiveStruct;
 export type RunOptions = {
   localesExtensions?: string[];
   localesPath?: string;
+  localesPathSubdirectories?: boolean;
   srcExtensions?: string[];
   srcPath?: string;
   ignorePaths?: string[];
@@ -49,7 +50,7 @@ export type RunOptions = {
   localeNameResolver?: ModuleNameResolver;
   localeFileParser?: ModuleResolver;
   context?: boolean;
-  flatTranslations?: boolean,
-  translationSeparator?: string,
-  translationContextSeparator?: string,
+  flatTranslations?: boolean;
+  translationSeparator?: string;
+  translationContextSeparator?: string;
 };

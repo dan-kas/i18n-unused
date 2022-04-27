@@ -33,6 +33,7 @@ module.exports = {
 | --- | --- | --- | --- | --- |
 | localesPath           | path to search for locales | yes | string | -
 | localesExtensions     | allowed file extensions for locales | no | string[] | if not set `localeNameResolver`: ['json']
+| localesPathSubdirectories | search for locales in subdirectories of `localesPath` | no | boolean | true
 | localeNameResolver    | file name resolver for locales | no | RegExp, (name: string) => boolean | -
 | localeFileParser      | resolve locale imports, for example if you use named imports from locales files, just wrap it to your own resolver | no | (module) => module | fn, return `module.default` or `module`
 | srcPath               | path to search for translations | no | string | `''` (same as run folder)

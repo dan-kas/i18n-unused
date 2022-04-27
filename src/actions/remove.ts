@@ -19,6 +19,7 @@ export const removeUnusedTranslations = async (
 
   const localesFilesPaths = await generateFilesPaths(config.localesPath, {
     srcExtensions: ['json'], // @TODO implement other types when add other types writes
+    recursiveSearch: config.localesPathSubdirectories,
   });
 
   const srcFilesPaths = await generateFilesPaths(

@@ -57,11 +57,18 @@ interface options {
   ignorePaths?: string[];
   srcExtensions?: string[];
   fileNameResolver?: ModuleNameResolver;
+  recursiveSearch?: boolean;
 }
 
 export const generateFilesPaths = async (
   srcPath: string,
-  { basePath, ignorePaths, srcExtensions, fileNameResolver }: options,
+  {
+    basePath,
+    ignorePaths,
+    srcExtensions,
+    fileNameResolver,
+    recursiveSearch = true,
+  }: options,
 ): Promise<string[]> => {
   // Dirent: https://nodejs.org/api/fs.html#class-fsdirent
   const entries: Dirent[] = await FsPromises.readdir(srcPath, {
@@ -88,6 +95,10 @@ export const generateFilesPaths = async (
     }
 
     if (dirent.isDirectory()) {
+      if (!recursiveSearch) {
+        return acc;
+      }
+
       const generatedNextPath = await generateFilesPaths(nextPath, {
         basePath,
         ignorePaths,
