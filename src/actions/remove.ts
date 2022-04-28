@@ -1,4 +1,4 @@
-import { writeFileSync } from 'fs';
+import { writeFileSync, readFileSync } from 'fs';
 
 import { createRequire } from 'module';
 
@@ -9,6 +9,7 @@ import { collectUnusedTranslations } from '../core/translations';
 import { generateFilesPaths } from '../helpers/files';
 import { applyToFlatKey } from '../core/action';
 import { checkUncommittedChanges } from '../helpers/git';
+import { detectJsonIndent } from '../helpers/detect-json-indent';
 
 import { GREEN } from '../helpers/consoleColor';
 
@@ -64,7 +65,13 @@ export const removeUnusedTranslations = async (
       ),
     );
 
-    writeFileSync(translation.localePath, JSON.stringify(locale, null, 2));
+    const localeFileContent = readFileSync(translation.localePath, 'utf8');
+    const localeFileIndent = detectJsonIndent(localeFileContent);
+
+    writeFileSync(
+      translation.localePath,
+      JSON.stringify(locale, null, localeFileIndent),
+    );
 
     console.log(GREEN, `Successfully removed: ${translation.localePath}`);
   });

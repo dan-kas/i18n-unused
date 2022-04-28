@@ -24,6 +24,17 @@ const isHTMLComment = (str: string): boolean => /^(<!--)/.test(str);
 const isStartOfMultilineComment = (str: string): boolean => /^(\/\*)/.test(str);
 const isEndOfMultilineComment = (str: string): boolean => /^(\*\/)/.test(str);
 
+const escapeValueForRegExp = (value: string): string =>
+  value.replace(/[.*+?^$()|[\]\\]/g, '\\$&');
+
+const getRegExpForKey = (key: string) =>
+  new RegExp(
+    `(?:[$ .](_|t|tc|i18nKey))\\([\\s]*['"]${escapeValueForRegExp(key)}['"]`,
+  );
+
+const isKeyInFile = (key: string, fileContent: string): boolean =>
+  !!fileContent.match(getRegExpForKey(key));
+
 const removeComments = (fileTxt: string): string => {
   let skip = false;
 
@@ -49,7 +60,7 @@ const removeComments = (fileTxt: string): string => {
 
 interface unusedOptions {
   context: boolean;
-  contextSeparator: string,
+  contextSeparator: string;
   ignoreComments: boolean;
   localeFileParser?: ModuleResolver;
   excludeTranslationKey?: string | string[];
@@ -77,10 +88,11 @@ export const collectUnusedTranslations = async (
     });
 
     srcFilesPaths.forEach((filePath: string) => {
-      const file = readFileSync(filePath).toString();
+      const file = readFileSync(filePath, 'utf-8');
+      const fileContent = ignoreComments ? removeComments(file) : file;
 
       [...translationsKeys].forEach((key: string) => {
-        if ((ignoreComments ? removeComments(file) : file).includes(key)) {
+        if (isKeyInFile(key, fileContent)) {
           translationsKeys.splice(translationsKeys.indexOf(key), 1);
         }
       });
@@ -101,7 +113,7 @@ export const collectUnusedTranslations = async (
 
 interface missedOptions {
   context: boolean;
-  contextSeparator: string,
+  contextSeparator: string;
   ignoreComments: boolean;
   localeFileParser?: ModuleResolver;
   excludeTranslationKey?: string | string[];
