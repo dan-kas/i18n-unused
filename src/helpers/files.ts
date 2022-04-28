@@ -63,7 +63,7 @@ interface options {
 export const generateFilesPaths = async (
   srcPath: string,
   {
-    basePath,
+    basePath = '',
     ignorePaths,
     srcExtensions,
     fileNameResolver,
@@ -80,17 +80,16 @@ export const generateFilesPaths = async (
     const acc = await accPromise;
 
     if (ignorePaths) {
-      const relativeBasePath = path.relative(process.cwd(), basePath);
-      const pathFromSrc = path.join(
-        relativeBasePath,
-        dirent.isDirectory() ? path.sep : '',
+      const fullBasePath = `${process.cwd()}/${basePath}`;
+      const pathFromSrc = `${nextPath.split(fullBasePath).join(basePath)}${
+        dirent.isDirectory() ? path.sep : ''
+      }`;
+
+      const isIgnored = ignorePaths.some((ignorePath) =>
+        pathFromSrc.startsWith(`${ignorePath}${path.sep}`),
       );
 
-      if (
-        ignorePaths.some((ignorePath) =>
-          pathFromSrc.startsWith(`${ignorePath}${path.sep}`),
-        )
-      ) {
+      if (isIgnored) {
         return acc;
       }
     }
